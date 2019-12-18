@@ -18,11 +18,11 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'procrust=procrust.cli:main',
+            'procrust=procrust.procrust:main',
         ],
     },
 
-    long_description=Path('README.rst').read_text(),
+    long_description=Path('README.md').read_text(),
     long_description_content_type='text/markdown',
 
     packages=find_packages(exclude=('tests',)),
