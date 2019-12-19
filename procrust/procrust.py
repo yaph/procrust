@@ -15,10 +15,9 @@ block_file = Path(storage, 'block.txt')
 
 
 def init():
-    storage.mkdir(exist_ok=True)
-    orig = Path(storage, 'hosts.original')
-    if not orig.exists():
-        Hosts().write(path=orig)
+    storage.mkdir()
+    block_file.touch()
+    Hosts().write(path=Path(storage, 'hosts.original'))
 
 
 def edit():
