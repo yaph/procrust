@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import argparse
 import os
-import shutil
 
 from pathlib import Path
 
@@ -15,15 +14,11 @@ storage = Path('~/.procrust').expanduser()
 block_file = Path(storage, 'block.txt')
 
 
-def write(hosts):
-    if not os.getuid() == 0:
-        os.system('sudo id -nu')
-    hosts.write()
-
-
 def init():
-    storage.mkdir()
-    shutil.copy(Path('/etc/hosts'), Path(storage, 'hosts.original'))
+    storage.mkdir(exist_ok=True)
+    orig = Path(storage, 'hosts.original')
+    if not orig.exists():
+        Hosts().write(path=orig)
 
 
 def edit():
@@ -44,7 +39,7 @@ def start():
     hosts = Hosts()
     for host in block_file.read_text().splitlines():
         hosts.remove_all_matching(name=host)
-    write(hosts)
+    hosts.write()
 
 
 def stop():
@@ -52,7 +47,7 @@ def stop():
     for host in block_file.read_text().splitlines():
         entry = HostsEntry(entry_type='ipv4', address='127.0.0.1', names=[host])
         hosts.add([entry])
-    write(hosts)
+    hosts.write()
 
 
 def main():
